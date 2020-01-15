@@ -1,0 +1,60 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="windowActionModeOverlay">true</item>
+
+    <!--<item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>  <item name="actionModeBackground">@android:color/darker_gray</item> <item name="android:windowActionModeOverlay">true</item>-->
+    </style>
+
+    <!--<style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>-->
+
+    <!--<style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+           <item name="android:activityOpenEnterAnimation">@anim/slide_in_bottom</item>
+           <item name="android:activityOpenExitAnimation">@anim/slide_out_up</item>
+           <item name="android:activityCloseEnterAnimation">@anim/slide_in_up</item>
+           <item name="android:activityCloseExitAnimation">@anim/slide_out_bottom</item>
+    </style>-->
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!-- <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+
+
+    <style name="ButtonEdit" parent="Base.TextAppearance.AppCompat.Button" >
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:src">@drawable/ic_edit_green</item>
+    </style>
+
+    <style name="ButtonDelete" parent="Base.TextAppearance.AppCompat.Button" >
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:src">@drawable/ic_delete_red</item>
+    </style>
+
+    <style name="ButtonAdd" parent="Base.TextAppearance.AppCompat.Button" >
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:src">@drawable/ic_add</item>
+    </style>
+
+    <style name="ButtonSubs" parent="Base.TextAppearance.AppCompat.Button" >
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:src">@drawable/ic_remove</item>
+    </style>
+
+
+</resources>

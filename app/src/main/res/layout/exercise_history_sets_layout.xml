@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="0,1,2">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/exercise_history_set"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/set_dummy_text"
+            android:gravity="center"
+            android:layout_column="0" />
+        <TextView
+            android:id="@+id/exercise_history_rep"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/rep_dummy_text"
+            android:gravity="center"
+            android:layout_column="1" />
+        <TextView
+            android:id="@+id/exercise_history_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/weight_dummy_text"
+            android:gravity="center"
+            android:layout_column="2" />
+
+    </TableRow>
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>-->
+</TableLayout>
