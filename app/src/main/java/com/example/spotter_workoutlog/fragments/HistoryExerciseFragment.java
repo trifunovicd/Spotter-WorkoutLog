@@ -32,7 +32,6 @@ import com.example.spotter_workoutlog.adapters.ExerciseHistoryAdapter;
 import com.example.spotter_workoutlog.database.models.ExerciseHistoryItem;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
-import com.example.spotter_workoutlog.dialogs.HistoryItemDialog;
 import com.example.spotter_workoutlog.viewmodels.WorkoutViewModel;
 import com.google.android.material.tabs.TabLayout;
 
@@ -109,15 +108,6 @@ public class HistoryExerciseFragment extends Fragment {
         exerciseHistoryAdapter.setOnHistoryItemLongClickListener(new ExerciseHistoryAdapter.OnHistoryItemLongClickListener() {
             @Override
             public void OnItemClick(final ExerciseHistoryItem exerciseHistoryItem, int position) {
-                /*HistoryItemDialog historyItemDialog = new HistoryItemDialog(exerciseHistoryItem, currentExerciseName);
-                historyItemDialog.show(getActivity().getSupportFragmentManager(), "history_item_dialog");
-
-                historyItemDialog.setHistoryItemDialogListener(new HistoryItemDialog.HistoryItemDialogListener() {
-                    @Override
-                    public void DeleteHistoryItem(SessionExercise sessionExercise) {
-                        workoutViewModel.deleteSessionExercise(sessionExercise);
-                    }
-                });*/
                 RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
                 final CardView cardView = viewHolder.itemView.findViewById(R.id.history_item_card_view);
 

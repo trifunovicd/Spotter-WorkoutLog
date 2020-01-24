@@ -15,7 +15,7 @@ import java.util.List;
 public interface ExerciseDao {
 
     @Insert
-    void insertExercise(Exercise exercise);
+    long insertExercise(Exercise exercise);
 
     @Update
     void updateExercise(Exercise exercise);
@@ -26,8 +26,11 @@ public interface ExerciseDao {
     @Query("DELETE FROM exercises")
     void deleteAllExercises();*/
 
-    @Query("SELECT * FROM exercises WHERE category_id = :categoryId and deleted = 0 ORDER BY name")
-    LiveData<List<Exercise>> getAllExercises(int categoryId);
+    @Query("SELECT * FROM exercises WHERE deleted = 0 ORDER BY name")
+    LiveData<List<Exercise>> getAllExercises();
+/*
+    @Query("SELECT * FROM exercises WHERE category_id = :categoryId and deleted = :categoryId ORDER BY name")
+    LiveData<List<Exercise>> getExercisesInCategory(int categoryId);*/
 
     @Query("SELECT COUNT(1) FROM exercises WHERE name = :name")
     int checkIfNameExists(String name);

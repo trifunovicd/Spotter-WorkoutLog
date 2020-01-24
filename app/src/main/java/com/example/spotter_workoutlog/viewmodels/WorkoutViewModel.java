@@ -87,6 +87,10 @@ public class WorkoutViewModel extends AndroidViewModel{
         workoutRepository.insertSessionExercise(sessionExercise);
     }
 
+    public void updateSessionExercise(SessionExercise sessionExercise){
+        workoutRepository.updateSessionExercise(sessionExercise);
+    }
+
     public void deleteSessionExercise(final SessionExercise sessionExercise){
         workoutRepository.deleteSessionExercise(sessionExercise);
     }
@@ -120,6 +124,18 @@ public class WorkoutViewModel extends AndroidViewModel{
 
     public void getAllSetsForSession(int sessionExerciseId){
         workoutRepository.getAllSetsForSession(sessionExerciseId);
+    }
+/*
+    public void updateSet(Set set){
+        workoutRepository.updateSet(set);
+    }*/
+
+    public void deleteSet(Set set){
+        workoutRepository.deleteSet(set);
+    }
+
+    public void deleteSets(final List<Set> sets){
+        workoutRepository.deleteSets(sets);
     }
 
     public interface OnTaskFinishVM{

@@ -21,5 +21,4 @@
             android:hint="@string/category_exercise_dialog_name_hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

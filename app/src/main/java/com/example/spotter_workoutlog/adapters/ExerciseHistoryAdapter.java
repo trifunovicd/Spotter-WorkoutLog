@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.spotter_workoutlog.R;
 import com.example.spotter_workoutlog.database.models.ExerciseHistoryItem;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
-import com.example.spotter_workoutlog.dialogs.HistoryItemDialog;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

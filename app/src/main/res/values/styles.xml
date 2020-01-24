@@ -33,6 +33,10 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
     <!-- <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
 
@@ -45,7 +49,7 @@
         <item name="backgroundTint">@android:color/white</item>
         <item name="android:src">@drawable/ic_delete_red</item>
     </style>
-
+<!--
     <style name="ButtonAdd" parent="Base.TextAppearance.AppCompat.Button" >
         <item name="backgroundTint">@color/colorAccent</item>
         <item name="android:src">@drawable/ic_add</item>
@@ -56,5 +60,5 @@
         <item name="android:src">@drawable/ic_remove</item>
     </style>
 
-
+-->
 </resources>

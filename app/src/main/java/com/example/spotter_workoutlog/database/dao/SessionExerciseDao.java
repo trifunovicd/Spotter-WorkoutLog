@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 
@@ -18,6 +19,9 @@ public interface SessionExerciseDao {
 
     @Delete
     void deleteSessionExercise(SessionExercise sessionExercise);
+
+    @Update
+    void updateSessionExercise(SessionExercise sessionExercise);
 
     @Query("SELECT * FROM session_exercises WHERE workout_session_id = :workoutSessionId ORDER BY `order`")
     LiveData<List<SessionExercise>> getAllSessionExercises(int workoutSessionId);

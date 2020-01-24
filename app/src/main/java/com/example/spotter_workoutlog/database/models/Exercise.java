@@ -6,27 +6,19 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-@Entity(
-        indices = {@Index("category_id")},
-        tableName = "exercises",
-        foreignKeys = @ForeignKey(
-                entity = Category.class,
-                parentColumns = "id",
-                childColumns = "category_id",
-                onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "exercises")
 public class Exercise {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private int category_id;
-
     private String name;
 
     private boolean deleted;
 
-    public Exercise(int category_id, String name, boolean deleted) {
-        this.category_id = category_id;
+    private boolean selected;
+
+    public Exercise(String name, boolean deleted) {
         this.name = name;
         this.deleted = deleted;
     }
@@ -39,12 +31,12 @@ public class Exercise {
         this.deleted = deleted;
     }
 
-    public int getId() {
-        return id;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -53,5 +45,9 @@ public class Exercise {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }

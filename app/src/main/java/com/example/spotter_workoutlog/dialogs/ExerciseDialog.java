@@ -20,7 +20,8 @@ import com.example.spotter_workoutlog.R;
 public class ExerciseDialog extends AppCompatDialogFragment {
 
     private EditText exerciseName;
-    private ExerciseDialogListener exerciseDialogListener;
+    private ExerciseAddDialogListener exerciseAddDialogListener;
+    private ExerciseEditDialogListener exerciseEditDialogListener;
 
     @NonNull
     @Override
@@ -72,7 +73,7 @@ public class ExerciseDialog extends AppCompatDialogFragment {
                     public void onClick(View v) {
                         String exercise_name = exerciseName.getText().toString();
                         if(!exercise_name.isEmpty()){
-                            exerciseDialogListener.addNewExercise(exercise_name);
+                            exerciseAddDialogListener.addNewExercise(exercise_name);
                             //Toast.makeText(getContext(), getString(R.string.exercise_add_success), Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
@@ -94,7 +95,7 @@ public class ExerciseDialog extends AppCompatDialogFragment {
                     public void onClick(View v) {
                         String exercise_name = exerciseName.getText().toString();
                         if(!exercise_name.isEmpty()){
-                            exerciseDialogListener.editExercise(exercise_id, exercise_name);
+                            exerciseEditDialogListener.editExercise(exercise_id, exercise_name);
                             //Toast.makeText(getContext(), getString(R.string.exercise_edit_success), Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
@@ -107,19 +108,19 @@ public class ExerciseDialog extends AppCompatDialogFragment {
         }
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        try {
-            exerciseDialogListener = (ExerciseDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "implement listener");
-        }
+    public interface ExerciseAddDialogListener{
+        void addNewExercise(String name);
     }
 
-    public interface ExerciseDialogListener{
-        void addNewExercise(String name);
+    public void setExerciseAddDialogListener(ExerciseAddDialogListener listener){
+        this.exerciseAddDialogListener = listener;
+    }
+
+    public interface ExerciseEditDialogListener{
         void editExercise(int exercise_id, String name);
+    }
+
+    public void setExerciseEditDialogListener(ExerciseEditDialogListener listener){
+        this.exerciseEditDialogListener = listener;
     }
 }

@@ -20,8 +20,8 @@ import java.util.Date;
                 @ForeignKey(
                     entity = Exercise.class,
                     parentColumns = "id",
-                    childColumns = "exercise_id"/*,
-                    onDelete = ForeignKey.CASCADE*/)})
+                    childColumns = "exercise_id",
+                    onDelete = ForeignKey.CASCADE)})
 public class SessionExercise {
 
     @PrimaryKey(autoGenerate = true)

@@ -1,33 +1,55 @@
 package com.example.spotter_workoutlog.repositories;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.spotter_workoutlog.database.AppDatabase;
 import com.example.spotter_workoutlog.database.AppExecutor;
 import com.example.spotter_workoutlog.database.dao.ExerciseDao;
+import com.example.spotter_workoutlog.database.dao.ExerciseInCategoryDao;
 import com.example.spotter_workoutlog.database.models.Exercise;
+import com.example.spotter_workoutlog.database.models.ExerciseInCategory;
 
 import java.util.List;
 
 public class ExerciseRepository {
+    private static final String TAG = "MyActivity";
     private OnExerciseTaskFinish onExerciseTaskFinish;
+    private OnExerciseInsertFinish onExerciseInsertFinish;
     private ExerciseDao exerciseDao;
     private LiveData<List<Exercise>> allExercises;
+    private ExerciseInCategoryDao exerciseInCategoryDao;
+    private LiveData<List<Exercise>> allExercisesInCategory;
 
     public ExerciseRepository(Application application){
         AppDatabase database = AppDatabase.getInstance(application);
         exerciseDao = database.exerciseDao();
-
+        exerciseInCategoryDao = database.exerciseInCategoryDao();
+        allExercises = exerciseDao.getAllExercises();
     }
 
-    public void insertExercise(final Exercise exercise){
+    public void insertExercise(final Exercise exercise, final boolean return_id){
 
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
-                exerciseDao.insertExercise(exercise);
+                long lastExerciseId = exerciseDao.insertExercise(exercise);
+
+                if(return_id){
+                    onExerciseInsertFinish.lastExerciseId(lastExerciseId);
+                }
+            }
+        });
+    }
+
+    public void insertExerciseInCategory(final ExerciseInCategory exerciseInCategory){
+
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                exerciseInCategoryDao.insertExerciseInCategory(exerciseInCategory);
             }
         });
     }
@@ -52,9 +74,23 @@ public class ExerciseRepository {
         });
     }
 
-    public LiveData<List<Exercise>> getAllExercises(int category_id){
-        allExercises = exerciseDao.getAllExercises(category_id);
+    public void deleteExerciseInCategory(final ExerciseInCategory exerciseInCategory){
+
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                exerciseInCategoryDao.deleteExerciseInCategory(exerciseInCategory);
+            }
+        });
+    }
+
+    public LiveData<List<Exercise>> getAllExercises(){
         return allExercises;
+    }
+
+    public LiveData<List<Exercise>> getAllExercisesInCategory(int category_id){
+        allExercisesInCategory = exerciseInCategoryDao.getAllExercisesInCategory(category_id);
+        return allExercisesInCategory;
     }
 
     public void checkIfNameExists(final String name){
@@ -73,5 +109,13 @@ public class ExerciseRepository {
 
     public void setOnFinishListener(OnExerciseTaskFinish listener){
         this.onExerciseTaskFinish = listener;
+    }
+
+    public interface OnExerciseInsertFinish{
+        void lastExerciseId(Long exercise_id);
+    }
+
+    public void setOnInsertFinishListener(OnExerciseInsertFinish listener){
+        this.onExerciseInsertFinish = listener;
     }
 }

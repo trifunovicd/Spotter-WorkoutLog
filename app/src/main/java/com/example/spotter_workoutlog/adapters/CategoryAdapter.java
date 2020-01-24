@@ -16,7 +16,8 @@ import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
     private List<Category> categories = new ArrayList<>();
-    private OnCategoryClickListener listener;
+    private OnCategoryClickListener onCategoryClickListener;
+    private OnCategoryLongClickListener onCategoryLongClickListener;
 
     @NonNull
     @Override
@@ -42,10 +43,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public Category getCategoryAtPosition(int position){
-        return categories.get(position);
-    }
-
     public class CategoryHolder extends RecyclerView.ViewHolder{
         private TextView categoryName;
 
@@ -58,9 +55,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.OnItemClick(categories.get(position));
+                    if(onCategoryClickListener != null && position != RecyclerView.NO_POSITION) {
+                        onCategoryClickListener.OnItemClick(categories.get(position));
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+                    if(onCategoryLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                        onCategoryLongClickListener.OnItemClick(categories.get(position), position);
+                    }
+                    return true;
                 }
             });
 
@@ -72,6 +80,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void setOnCategoryClickListener(OnCategoryClickListener listener){
-        this.listener = listener;
+        this.onCategoryClickListener = listener;
+    }
+
+    public interface OnCategoryLongClickListener{
+        void OnItemClick(Category category, int position);
+    }
+
+    public void setOnCategoryLongClickListener(OnCategoryLongClickListener listener){
+        this.onCategoryLongClickListener = listener;
     }
 }

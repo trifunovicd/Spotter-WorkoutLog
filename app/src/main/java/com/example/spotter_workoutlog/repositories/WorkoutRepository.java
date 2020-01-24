@@ -85,6 +85,15 @@ public class WorkoutRepository {
         });
     }
 
+    public void updateSessionExercise(final SessionExercise sessionExercise){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                sessionExerciseDao.updateSessionExercise(sessionExercise);
+            }
+        });
+    }
+
     public void deleteSessionExercise(final SessionExercise sessionExercise){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
@@ -143,6 +152,33 @@ public class WorkoutRepository {
             public void run() {
                 allSetsForSession = setDao.getAllSetsForSession(sessionExerciseId);
                 onTaskFinishSets.getAllSetsForSession(allSetsForSession);
+            }
+        });
+    }
+/*
+    public void updateSet(final Set set){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                setDao.updateSet(set);
+            }
+        });
+    }*/
+
+    public void deleteSet(final Set set){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                setDao.deleteSet(set);
+            }
+        });
+    }
+
+    public void deleteSets(final List<Set> sets){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                setDao.deleteSets(sets);
             }
         });
     }

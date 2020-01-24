@@ -16,11 +16,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.spotter_workoutlog.R;
+import com.example.spotter_workoutlog.viewmodels.CategoryViewModel;
+import com.example.spotter_workoutlog.viewmodels.WorkoutViewModel;
 
 public class CategoryDialog extends AppCompatDialogFragment {
 
     private EditText categoryName;
-    private CategoryDialogListener categoryDialogListener;
+    private CategoryAddDialogListener categoryAddDialogListener;
+    private CategoryEditDialogListener categoryEditDialogListener;
 
     @NonNull
     @Override
@@ -72,7 +75,7 @@ public class CategoryDialog extends AppCompatDialogFragment {
                     public void onClick(View v) {
                         String category_name = categoryName.getText().toString();
                         if(!category_name.isEmpty()){
-                            categoryDialogListener.addNewCategory(category_name);
+                            categoryAddDialogListener.addNewCategory(category_name);
                             //Toast.makeText(getContext(), getString(R.string.category_add_success), Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
@@ -94,7 +97,7 @@ public class CategoryDialog extends AppCompatDialogFragment {
                     public void onClick(View v) {
                         String category_name = categoryName.getText().toString();
                         if(!category_name.isEmpty()){
-                            categoryDialogListener.editCategory(category_id, category_name);
+                            categoryEditDialogListener.editCategory(category_id, category_name);
                             //Toast.makeText(getContext(), getString(R.string.category_edit_success), Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
@@ -107,19 +110,19 @@ public class CategoryDialog extends AppCompatDialogFragment {
         }
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        try {
-            categoryDialogListener = (CategoryDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "implement listener");
-        }
+    public interface CategoryAddDialogListener{
+        void addNewCategory(String name);
     }
 
-    public interface CategoryDialogListener{
-        void addNewCategory(String name);
+    public void setCategoryAddDialogListener(CategoryAddDialogListener listener){
+        this.categoryAddDialogListener = listener;
+    }
+
+    public interface CategoryEditDialogListener{
         void editCategory(int category_id, String name);
+    }
+
+    public void setCategoryEditDialogListener(CategoryEditDialogListener listener){
+        this.categoryEditDialogListener = listener;
     }
 }

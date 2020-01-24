@@ -33,6 +33,7 @@ import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
 import com.example.spotter_workoutlog.database.models.WorkoutSession;
 import com.example.spotter_workoutlog.dialogs.SetDialog;
+import com.example.spotter_workoutlog.utilities.Utility;
 import com.example.spotter_workoutlog.viewmodels.WorkoutViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -48,22 +49,21 @@ import java.util.List;
 public class NewExerciseFragment extends Fragment {
     private static final String TAG = "MyActivity";
     private static final String EXERCISE_ID = "exercise_id";
-    private int currentExerciseId;
-    private int currentWorkoutId;
-    private int currentSessionExerciseId = 27;
+    private int currentExerciseId, currentWorkoutId, currentSessionExerciseId;
     private WorkoutViewModel workoutViewModel;
     private List<Set> sets = new ArrayList<>();
     private int order = 0;
     //private int setId = 0;
     private int setOrder = 0;
     private SetAdapter setsAdapter;
-    private List<WorkoutSession> sessions;//samo provjera u observe
+    //private List<WorkoutSession> sessions;//samo provjera u observe
     private Handler mHandler;
-    private CardView setsCardView;
+    private CardView setsCardView, noteCardView;
     private TextInputEditText note;
-    private CardView noteCardView;
     private Boolean show_note = true;
     private Boolean show_note_on_rotation = false;
+
+    private Utility utility = new Utility();
 
     public static NewExerciseFragment newInstance(int exercise_id) {
         NewExerciseFragment fragment = new NewExerciseFragment();
@@ -123,7 +123,7 @@ public class NewExerciseFragment extends Fragment {
         SetVisibility();
 
         workoutViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
-        workoutViewModel.getAllWorkoutSessions().observe(this, new Observer<List<WorkoutSession>>() {
+        /*workoutViewModel.getAllWorkoutSessions().observe(this, new Observer<List<WorkoutSession>>() {
             @Override
             public void onChanged(List<WorkoutSession> workoutSessions) {
                 sessions = workoutSessions;
@@ -138,13 +138,13 @@ public class NewExerciseFragment extends Fragment {
                 }
 
             }
-        });
+        });*/
 
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                Toast.makeText(getActivity(), "Podaci su spremljeni!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.data_saved), Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -186,9 +186,9 @@ public class NewExerciseFragment extends Fragment {
             }
 
             @Override
-            public void OnDeleteClick(Set set) {
+            public void OnDeleteClick(final Set set) {
                 //setId = set.getId();
-                setOrder = set.getOrder();
+                //setOrder = set.getOrder();
 
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.set_dialog_delete_title))
@@ -203,8 +203,10 @@ public class NewExerciseFragment extends Fragment {
                         .setPositiveButton(getString(R.string.dialog_delete), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.d(TAG, "onClick: " + setOrder);//Log.d(TAG, "onClick: " + setId);
-                                sets.remove(setOrder-1);//sets.remove(setId-1);
+                                //Log.d(TAG, "onClick: " + setOrder);//Log.d(TAG, "onClick: " + setId);
+                                //sets.remove(setOrder-1);//sets.remove(setId-1);
+
+                                sets.remove(set);
 
                                 int list_order = 0;
                                 for (Set set : sets) {
@@ -223,21 +225,24 @@ public class NewExerciseFragment extends Fragment {
         reps_sub_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RepsSubtract(reps);
+                utility.RepsSubtract(reps);
+                //RepsSubtract(reps);
             }
         });
 
         reps_add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RepsAdd(reps);
+                utility.RepsAdd(reps);
+                //RepsAdd(reps);
             }
         });
 
         weight_sub_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WeightSubtract(weight);
+                utility.WeightSubtract(weight);
+                //WeightSubtract(weight);
 
             }
         });
@@ -245,7 +250,8 @@ public class NewExerciseFragment extends Fragment {
         weight_add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WeightAdd(weight);
+                utility.WeightAdd(weight);
+                //WeightAdd(weight);
             }
         });
 
@@ -305,60 +311,6 @@ public class NewExerciseFragment extends Fragment {
         else{
             noteCardView.setVisibility(View.GONE);
             show_note = true;
-        }
-    }
-
-    private void RepsSubtract(TextInputEditText textInputEditText){
-        if(!TextUtils.isEmpty(textInputEditText.getText())){
-            int quantity = Integer.parseInt(textInputEditText.getText().toString().trim());
-            quantity = quantity - 1;
-            if(quantity < 0){
-                textInputEditText.setText(String.valueOf(0));
-            }
-            else{
-                textInputEditText.setText(String.valueOf(quantity));
-            }
-        }
-        else{
-            textInputEditText.setText(String.valueOf(0));
-        }
-    }
-
-    private void RepsAdd(TextInputEditText textInputEditText){
-        if(!TextUtils.isEmpty(textInputEditText.getText())){
-            int quantity = Integer.parseInt(textInputEditText.getText().toString().trim());
-            quantity = quantity + 1;
-            textInputEditText.setText(String.valueOf(quantity));
-        }
-        else{
-            textInputEditText.setText(String.valueOf(1));
-        }
-    }
-
-    private void WeightSubtract(TextInputEditText textInputEditText){
-        if(!TextUtils.isEmpty(textInputEditText.getText())){
-            float quantity = Float.parseFloat(textInputEditText.getText().toString().trim());
-            quantity = quantity - 1;
-            if(quantity < 0){
-                textInputEditText.setText(String.valueOf(0.0));
-            }
-            else{
-                textInputEditText.setText(String.valueOf(quantity));
-            }
-        }
-        else{
-            textInputEditText.setText(String.valueOf(0.0));
-        }
-    }
-
-    private void WeightAdd(TextInputEditText textInputEditText){
-        if(!TextUtils.isEmpty(textInputEditText.getText())){
-            float quantity = Float.parseFloat(textInputEditText.getText().toString().trim());
-            quantity = quantity + 1;
-            textInputEditText.setText(String.valueOf(quantity));
-        }
-        else{
-            textInputEditText.setText(String.valueOf(1.0));
         }
     }
 
@@ -449,18 +401,6 @@ public class NewExerciseFragment extends Fragment {
 
                     getActivity().finish();
                 }
-/*
-                @Override
-                public void getMaxOrderSets(int maxOrder) {
-                    Log.d(TAG, "getMaxOrderSets: " + maxOrder);
-                    if(maxOrder != 0){
-                        //order sa 1
-                    }
-                    else{
-                        //Set set = new Set(currentSessionExerciseId,); order sa 1 pocinje
-                    }
-                }
-*/
             });
 
             workoutViewModel.getLastWorkoutSession();

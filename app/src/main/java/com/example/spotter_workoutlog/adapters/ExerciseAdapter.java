@@ -16,7 +16,8 @@ import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseHolder> {
     private List<Exercise> exercises = new ArrayList<>();
-    private OnExerciseClickListener listener;
+    private OnExerciseClickListener onExerciseClickListener;
+    private OnExerciseLongClickListener onExerciseLongClickListener;
 
     @NonNull
     @Override
@@ -42,10 +43,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         notifyDataSetChanged();
     }
 
-    public Exercise getExerciseAtPosition(int position){
-        return exercises.get(position);
-    }
-
     public class ExerciseHolder extends RecyclerView.ViewHolder{
         private TextView exerciseName;
 
@@ -58,9 +55,20 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.OnItemClick(exercises.get(position));
+                    if(onExerciseClickListener != null && position != RecyclerView.NO_POSITION) {
+                        onExerciseClickListener.OnItemClick(exercises.get(position));
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+                    if(onExerciseLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                        onExerciseLongClickListener.OnItemClick(exercises.get(position), position);
+                    }
+                    return true;
                 }
             });
 
@@ -72,6 +80,14 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     }
 
     public void setOnExerciseClickListener(OnExerciseClickListener listener){
-        this.listener = listener;
+        this.onExerciseClickListener = listener;
+    }
+
+    public interface OnExerciseLongClickListener{
+        void OnItemClick(Exercise exercise, int position);
+    }
+
+    public void setOnExerciseLongClickListener(OnExerciseLongClickListener listener){
+        this.onExerciseLongClickListener = listener;
     }
 }

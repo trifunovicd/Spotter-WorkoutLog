@@ -11,16 +11,18 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.spotter_workoutlog.database.dao.CategoryDao;
 import com.example.spotter_workoutlog.database.dao.ExerciseDao;
+import com.example.spotter_workoutlog.database.dao.ExerciseInCategoryDao;
 import com.example.spotter_workoutlog.database.dao.SessionExerciseDao;
 import com.example.spotter_workoutlog.database.dao.SetDao;
 import com.example.spotter_workoutlog.database.dao.WorkoutSessionDao;
 import com.example.spotter_workoutlog.database.models.Category;
 import com.example.spotter_workoutlog.database.models.Exercise;
+import com.example.spotter_workoutlog.database.models.ExerciseInCategory;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
 import com.example.spotter_workoutlog.database.models.WorkoutSession;
 
-@Database(entities = {Category.class, Exercise.class, WorkoutSession.class, SessionExercise.class, Set.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Exercise.class, ExerciseInCategory.class, WorkoutSession.class, SessionExercise.class, Set.class}, version = 1, exportSchema = false)
 @TypeConverters({DateTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -28,6 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CategoryDao categoryDao();
     public abstract ExerciseDao exerciseDao();
+    public abstract ExerciseInCategoryDao exerciseInCategoryDao();
     public abstract WorkoutSessionDao workoutSessionDao();
     public abstract SessionExerciseDao sessionExerciseDao();
     public abstract SetDao setDao();
