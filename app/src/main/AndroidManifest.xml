@@ -21,7 +21,8 @@
         <activity android:name=".activities.EditSessionExerciseActivity" />
         <activity
             android:name=".activities.ExerciseActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.CategoryActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.CalendarActivity" />

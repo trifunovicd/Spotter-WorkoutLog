@@ -76,4 +76,29 @@
     <string name="exercise_add_fail">Vježba već postoji!</string>
     <string name="category_add_fail">Kategorija već postoji!</string>
     <string name="search_exercises">Pretraži</string>
+    <string name="total_volume">Ukupni volumen</string>
+    <string name="number">%1$s kg</string>
+    <string name="one_month">1 mjesec</string>
+    <string name="three_months">3 mjeseca</string>
+    <string name="six_months">6 mjeseci</string>
+    <string name="one_year">1 godina</string>
+    <string name="all_time">Cijelo vrijeme</string>
+    <string name="chart_text">Nema podataka za prikaz.</string>
+
+    <string-array name="graph_items">
+        <item>Ukupni volumen</item>
+        <item>Ukupna ponavljanja</item>
+        <item>Max kilaža</item>
+        <item>Max ponavljanja</item>
+        <item>1RM</item>
+    </string-array>
+<!--
+    <string-array name="graph_times">
+        <item>1 mjesec</item>
+        <item>3 mjeseca</item>
+        <item>6 mjeseci</item>
+        <item>1 godina</item>
+        <item>Cijelo vrijeme</item>
+    </string-array>
+    -->
 </resources>

@@ -18,10 +18,12 @@ public class WorkoutViewModel extends AndroidViewModel{
     private static final String TAG = "MyActivity";
     private OnTaskFinishVM onTaskFinishVM;
     private OnTaskFinishSetsVM onTaskFinishSetsVM;
+    private OnTaskFinishSetsVolumeVM onTaskFinishSetsVolumeVM;
     private WorkoutRepository workoutRepository;
     private LiveData<List<WorkoutSession>> allWorkoutSessions;
     private LiveData<List<SessionExercise>> allSessionExercises;
     private LiveData<List<SessionExercise>> allSessionExercisesForExercise;
+    private LiveData<List<SessionExercise>> allSessionExercisesForGraph;
     private LiveData<List<Set>> allSets;
     private List<Set> allSetsForSession;
 
@@ -30,6 +32,7 @@ public class WorkoutViewModel extends AndroidViewModel{
         workoutRepository = new WorkoutRepository(application);
         allWorkoutSessions = workoutRepository.getAllWorkoutSessions();
 
+        ///// for NewExerciseFragment
         workoutRepository.setOnFinishListener(new WorkoutRepository.OnTaskFinish() {
 
             @Override
@@ -51,22 +54,46 @@ public class WorkoutViewModel extends AndroidViewModel{
             public void lastSessionExerciseId(Long sessionExerciseId) {
                 onTaskFinishVM.lastSessionExerciseId(sessionExerciseId);
             }
-/*
-            @Override
-            public void getMaxOrderSets(int maxOrder) {
-                onTaskFinishVM.getMaxOrderSets(maxOrder);
-            }
-*/
         });
 
+        ///// for HistoryExerciseFragment
         workoutRepository.setOnSetsFinishListener(new WorkoutRepository.OnTaskFinishSets() {
             @Override
             public void getAllSetsForSession(List<Set> sets) {
                 onTaskFinishSetsVM.getAllSetsForSession(sets);
             }
         });
+
+        ///// for GraphExerciseFragment
+        workoutRepository.setOnSetsVolumeFinishListener(new WorkoutRepository.OnTaskFinishSetsVolume() {
+            @Override
+            public void getTotalVolume(Float totalVolume) {
+                onTaskFinishSetsVolumeVM.getTotalVolume(totalVolume);
+            }
+
+            @Override
+            public void getTotalReps(Float totalReps) {
+                onTaskFinishSetsVolumeVM.getTotalReps(totalReps);
+            }
+
+            @Override
+            public void getMaxWeight(Float maxWeight) {
+                onTaskFinishSetsVolumeVM.getMaxWeight(maxWeight);
+            }
+
+            @Override
+            public void getMaxReps(Float maxReps) {
+                onTaskFinishSetsVolumeVM.getMaxReps(maxReps);
+            }
+
+            @Override
+            public void getSetWithMaxValues(Set set) {
+                onTaskFinishSetsVolumeVM.getSetWithMaxValues(set);
+            }
+        });
     }
 
+    ///// WorkoutSession
     public void getLastWorkoutSession(){
         workoutRepository.getLastWorkoutSession();
     }
@@ -79,6 +106,8 @@ public class WorkoutViewModel extends AndroidViewModel{
         return allWorkoutSessions;
     }
 
+
+    ///// SessionExercise
     public void getMaxOrderOfSessionExercise(final int workoutSessionId){
         workoutRepository.getMaxOrderOfSessionExercise(workoutSessionId);
     }
@@ -104,11 +133,14 @@ public class WorkoutViewModel extends AndroidViewModel{
         allSessionExercisesForExercise = workoutRepository.getAllSessionExercisesForExercise(exerciseId);
         return allSessionExercisesForExercise;
     }
-/*
-    public void getMaxOrderSets(final int sessionExerciseId){
-        workoutRepository.getMaxOrderSets(sessionExerciseId);
+
+    public LiveData<List<SessionExercise>> getAllSessionExercisesForGraph(int exerciseId){
+        allSessionExercisesForGraph = workoutRepository.getAllSessionExercisesForGraph(exerciseId);
+        return allSessionExercisesForGraph;
     }
-*/
+
+
+    ///// Set
     public void insertSet(Set set){
         workoutRepository.insertSet(set);
     }
@@ -125,10 +157,26 @@ public class WorkoutViewModel extends AndroidViewModel{
     public void getAllSetsForSession(int sessionExerciseId){
         workoutRepository.getAllSetsForSession(sessionExerciseId);
     }
-/*
-    public void updateSet(Set set){
-        workoutRepository.updateSet(set);
-    }*/
+
+    public void getTotalVolume(int sessionExerciseId){
+        workoutRepository.getTotalVolume(sessionExerciseId);
+    }
+
+    public void getTotalReps(int sessionExerciseId){
+        workoutRepository.getTotalReps(sessionExerciseId);
+    }
+
+    public void getMaxWeight(int sessionExerciseId){
+        workoutRepository.getMaxWeight(sessionExerciseId);
+    }
+
+    public void getMaxReps(int sessionExerciseId){
+        workoutRepository.getMaxReps(sessionExerciseId);
+    }
+
+    public void getSetWithMaxValues(int sessionExerciseId){
+        workoutRepository.getSetWithMaxValues(sessionExerciseId);
+    }
 
     public void deleteSet(Set set){
         workoutRepository.deleteSet(set);
@@ -138,6 +186,9 @@ public class WorkoutViewModel extends AndroidViewModel{
         workoutRepository.deleteSets(sets);
     }
 
+
+
+    ///// for NewExerciseFragment
     public interface OnTaskFinishVM{
         void getLastWorkoutSession(WorkoutSession workoutSession);
         void getMaxOrderSessionExercise(int maxOrder);
@@ -152,12 +203,27 @@ public class WorkoutViewModel extends AndroidViewModel{
     }
 
 
+    ///// for HistoryExerciseFragment
     public interface OnTaskFinishSetsVM{
         void getAllSetsForSession(List<Set> sets);
     }
 
     public void setOnFinishSetsVMListener(OnTaskFinishSetsVM listener){
         this.onTaskFinishSetsVM = listener;
+    }
+
+
+    ///// for GraphExerciseFragment
+    public interface OnTaskFinishSetsVolumeVM{
+        void getTotalVolume(Float totalVolume);
+        void getTotalReps(Float totalReps);
+        void getMaxWeight(Float maxWeight);
+        void getMaxReps(Float maxReps);
+        void getSetWithMaxValues(Set set);
+    }
+
+    public void setOnSetsVolumeVMFinishListener(OnTaskFinishSetsVolumeVM listener){
+        this.onTaskFinishSetsVolumeVM = listener;
     }
 
 }

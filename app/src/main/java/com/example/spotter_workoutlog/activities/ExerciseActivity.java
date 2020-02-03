@@ -3,6 +3,7 @@ package com.example.spotter_workoutlog.activities;
 import android.os.Bundle;
 
 import com.example.spotter_workoutlog.R;
+import com.example.spotter_workoutlog.fragments.GraphExerciseFragment;
 import com.example.spotter_workoutlog.fragments.HistoryExerciseFragment;
 import com.example.spotter_workoutlog.fragments.NewExerciseFragment;
 import com.google.android.material.appbar.AppBarLayout;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.TextView;
@@ -25,7 +27,7 @@ import android.widget.Toast;
 import com.example.spotter_workoutlog.adapters.ExercisePagerAdapter;
 
 public class ExerciseActivity extends AppCompatActivity {
-
+    private static final String TAG = "MyActivity";
     private String exercise_name;
     private int exercise_id;
     private ViewPager viewPager;

@@ -20,11 +20,13 @@ public class WorkoutRepository {
     private static final String TAG = "MyActivity";
     private OnTaskFinish onTaskFinish;
     private OnTaskFinishSets onTaskFinishSets;
+    private OnTaskFinishSetsVolume onTaskFinishSetsVolume;
     private WorkoutSessionDao workoutSessionDao;
     private LiveData<List<WorkoutSession>> allWorkoutSessions;
     private SessionExerciseDao sessionExerciseDao;
     private LiveData<List<SessionExercise>> allSessionExercises;
     private LiveData<List<SessionExercise>> allSessionExercisesForExercise;
+    private LiveData<List<SessionExercise>> allSessionExercisesForGraph;
     private SetDao setDao;
     private LiveData<List<Set>> allSets;
     private List<Set> allSetsForSession;
@@ -38,6 +40,7 @@ public class WorkoutRepository {
     }
 
 
+    ///// WorkoutSession
     public void getLastWorkoutSession(){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
@@ -64,6 +67,7 @@ public class WorkoutRepository {
     }
 
 
+    ///// SessionExercise
     public void getMaxOrderOfSessionExercise(final int workoutSessionId){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
@@ -112,17 +116,14 @@ public class WorkoutRepository {
         allSessionExercisesForExercise = sessionExerciseDao.getAllSessionExercisesForExercise(exerciseId);
         return allSessionExercisesForExercise;
     }
-/*
-    public void getMaxOrderSets(final int sessionExerciseId){
-        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                int maxOrderSets = setDao.getMaxOrderSets(sessionExerciseId);
-                onTaskFinish.getMaxOrderSets(maxOrderSets);
-            }
-        });
+
+    public LiveData<List<SessionExercise>> getAllSessionExercisesForGraph(int exerciseId){
+        allSessionExercisesForGraph = sessionExerciseDao.getAllSessionExercisesForGraph(exerciseId);
+        return allSessionExercisesForGraph;
     }
-*/
+
+
+    ///// Set
     public void insertSet(final Set set){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
@@ -155,15 +156,56 @@ public class WorkoutRepository {
             }
         });
     }
-/*
-    public void updateSet(final Set set){
+
+    public void getTotalVolume(final int sessionExerciseId){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
-                setDao.updateSet(set);
+                Float totalVolume = setDao.getTotalVolume(sessionExerciseId);
+                onTaskFinishSetsVolume.getTotalVolume(totalVolume);
             }
         });
-    }*/
+    }
+
+    public void getTotalReps(final int sessionExerciseId){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Float totalReps = setDao.getTotalReps(sessionExerciseId);
+                onTaskFinishSetsVolume.getTotalReps(totalReps);
+            }
+        });
+    }
+
+    public void getMaxWeight(final int sessionExerciseId){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Float maxWeight = setDao.getMaxWeight(sessionExerciseId);
+                onTaskFinishSetsVolume.getMaxWeight(maxWeight);
+            }
+        });
+    }
+
+    public void getMaxReps(final int sessionExerciseId){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Float maxReps = setDao.getMaxReps(sessionExerciseId);
+                onTaskFinishSetsVolume.getMaxReps(maxReps);
+            }
+        });
+    }
+
+    public void getSetWithMaxValues(final int sessionExerciseId){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Set set = setDao.getSetWithMaxValues(sessionExerciseId);
+                onTaskFinishSetsVolume.getSetWithMaxValues(set);
+            }
+        });
+    }
 
     public void deleteSet(final Set set){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
@@ -184,6 +226,7 @@ public class WorkoutRepository {
     }
 
 
+    ///// for NewExerciseFragment
     public interface OnTaskFinish{
         void getLastWorkoutSession(WorkoutSession workoutSession);
         void getMaxOrderSessionExercise(int maxOrder);
@@ -196,11 +239,27 @@ public class WorkoutRepository {
         this.onTaskFinish = listener;
     }
 
+
+    ///// for HistoryExerciseFragment
     public interface OnTaskFinishSets{
         void getAllSetsForSession(List<Set> sets);
     }
 
     public void setOnSetsFinishListener(OnTaskFinishSets listener){
         this.onTaskFinishSets = listener;
+    }
+
+
+    ///// for GraphExerciseFragment
+    public interface OnTaskFinishSetsVolume{
+        void getTotalVolume(Float totalVolume);
+        void getTotalReps(Float totalReps);
+        void getMaxWeight(Float maxWeight);
+        void getMaxReps(Float maxReps);
+        void getSetWithMaxValues(Set set);
+    }
+
+    public void setOnSetsVolumeFinishListener(OnTaskFinishSetsVolume listener){
+        this.onTaskFinishSetsVolume = listener;
     }
 }

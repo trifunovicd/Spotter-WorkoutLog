@@ -43,4 +43,5 @@ ext {
     materialVersion = '1.0.0'
     cardViewVersion = '28.0.0'
     jodaTime = '2.10.5'
+    MPAndroidChart = 'v3.1.0'
 }

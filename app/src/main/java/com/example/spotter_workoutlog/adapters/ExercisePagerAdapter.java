@@ -44,7 +44,7 @@ public class ExercisePagerAdapter extends FragmentPagerAdapter {
                 return HistoryExerciseFragment.newInstance(exercise_id, exercise_name);
 
             case 2:
-                return new GraphExerciseFragment();
+                return GraphExerciseFragment.newInstance(exercise_id);
 
             default:
                 return null;

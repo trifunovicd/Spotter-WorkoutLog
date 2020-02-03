@@ -29,6 +29,9 @@ public interface SessionExerciseDao {
     @Query("SELECT * FROM session_exercises WHERE exercise_id = :exerciseId ORDER BY date DESC")
     LiveData<List<SessionExercise>> getAllSessionExercisesForExercise(int exerciseId);
 
+    @Query("SELECT * FROM session_exercises WHERE exercise_id = :exerciseId")
+    LiveData<List<SessionExercise>> getAllSessionExercisesForGraph(int exerciseId);
+
     @Query("SELECT MAX(`order`) FROM session_exercises WHERE workout_session_id = :workoutSessionId")
     int getMaxOrderOfSessionExercise(int workoutSessionId);
 }
