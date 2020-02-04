@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -59,9 +60,10 @@ public class GraphDialog extends AppCompatDialogFragment{
     private String lineDataName;
     private TextView graphTitle;
     private Boolean only_number;
-    //private Spinner spinner;
     private ImageButton popup;
     private PopupMenu popupMenu;
+    private int height;
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     @NonNull
     @Override
@@ -77,9 +79,9 @@ public class GraphDialog extends AppCompatDialogFragment{
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        display.getMetrics(metrics);
 
-        int height;
-        int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = display.getRotation();
 
         if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
             height = size.y;
@@ -148,60 +150,9 @@ public class GraphDialog extends AppCompatDialogFragment{
             }
         });
 
-/*
-
-        spinner = view.findViewById(R.id.dialog_chart_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.graph_times, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-        spinner.setSelection(4, false);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (spinner.getSelectedItemPosition()){
-                    case 0:
-                        ChangeDateView(1);
-                        break;
-                    case 1:
-                        ChangeDateView(3);
-                        break;
-                    case 2:
-                        ChangeDateView(6);
-                        break;
-                    case 3:
-                        ChangeDateView(12);
-                        break;
-                    case 4:
-                        SetData(entries);
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-*/
-
         dialog_chart = view.findViewById(R.id.dialog_chart);
 
-        ValueFormatter xAxisFormatter = new DateAxisValueFormatter(reference_timestamp);
-        XAxis xAxis = dialog_chart.getXAxis();
-        xAxis.setValueFormatter(xAxisFormatter);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        dialog_chart.getDescription().setEnabled(false);
-        dialog_chart.getLegend().setEnabled(false);
-        dialog_chart.setMinimumHeight(height - 220);
-
-        CustomMarkerView markerView = new CustomMarkerView (getActivity(), R.layout.marker_view_layout, reference_timestamp, only_number);
-        markerView.setChartView(dialog_chart);
-        dialog_chart.setMarker(markerView);
-
-        SetData(entries);
+        GenerateGraph();
 
         builder.setView(view);
         return builder.create();
@@ -211,6 +162,43 @@ public class GraphDialog extends AppCompatDialogFragment{
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+    }
+
+    private void GenerateGraph(){
+        ValueFormatter xAxisFormatter = new DateAxisValueFormatter(reference_timestamp);
+        XAxis xAxis = dialog_chart.getXAxis();
+        xAxis.setValueFormatter(xAxisFormatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        dialog_chart.getDescription().setEnabled(false);
+        dialog_chart.getLegend().setEnabled(false);
+
+        int dpi = metrics.densityDpi;
+
+        if(dpi > 480){
+            dialog_chart.setMinimumHeight(height - 260);
+        }
+        else if(dpi > 320){
+            dialog_chart.setMinimumHeight(height - 220);
+        }
+        else if(dpi > 240){
+            dialog_chart.setMinimumHeight(height - 150);
+        }
+        else if(dpi > 160){
+            dialog_chart.setMinimumHeight(height - 100);
+        }
+        else if(dpi > 120){
+            dialog_chart.setMinimumHeight(height - 65);
+        }
+        else{
+            dialog_chart.setMinimumHeight(height - 50);
+        }
+
+        CustomMarkerView markerView = new CustomMarkerView (getActivity(), R.layout.marker_view_layout, reference_timestamp, only_number);
+        markerView.setChartView(dialog_chart);
+        dialog_chart.setMarker(markerView);
+
+        SetData(entries);
     }
 
     private void ChangeDateView(int months){

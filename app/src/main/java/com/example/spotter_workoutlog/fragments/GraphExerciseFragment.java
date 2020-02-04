@@ -101,18 +101,6 @@ public class GraphExerciseFragment extends Fragment {
         chart = view.findViewById(R.id.chart);
         chart.setNoDataText(getString(R.string.chart_text));
 
-        ValueFormatter xAxisFormatter = new DateAxisValueFormatter(reference_timestamp);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setValueFormatter(xAxisFormatter);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setEnabled(false);
-
-        chart.getDescription().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.setTouchEnabled(false);
-
         graphTitle = view.findViewById(R.id.graph_title);
         spinner = view.findViewById(R.id.graph_spinner);
 
@@ -366,6 +354,22 @@ public class GraphExerciseFragment extends Fragment {
 
             entries.add(new Entry(date, graphData.getNumber()));
         }
+        GenerateGraph();
+    }
+
+    private void GenerateGraph(){
+        ValueFormatter xAxisFormatter = new DateAxisValueFormatter(reference_timestamp);
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(xAxisFormatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setEnabled(false);
+
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        chart.setTouchEnabled(false);
+
         ChangeDateView(entries);
     }
 
