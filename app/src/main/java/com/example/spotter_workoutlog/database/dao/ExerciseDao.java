@@ -34,4 +34,7 @@ public interface ExerciseDao {
 
     @Query("SELECT COUNT(1) FROM exercises WHERE name = :name")
     int checkIfNameExists(String name);
+
+    @Query("SELECT name FROM exercises WHERE id = :exercise_id")
+    String getExerciseName(int exercise_id);
 }

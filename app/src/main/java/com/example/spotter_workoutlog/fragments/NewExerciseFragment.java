@@ -53,10 +53,8 @@ public class NewExerciseFragment extends Fragment {
     private WorkoutViewModel workoutViewModel;
     private List<Set> sets = new ArrayList<>();
     private int order = 0;
-    //private int setId = 0;
     private int setOrder = 0;
     private SetAdapter setsAdapter;
-    //private List<WorkoutSession> sessions;//samo provjera u observe
     private Handler mHandler;
     private CardView setsCardView, noteCardView;
     private TextInputEditText note;
@@ -123,22 +121,6 @@ public class NewExerciseFragment extends Fragment {
         SetVisibility();
 
         workoutViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
-        /*workoutViewModel.getAllWorkoutSessions().observe(this, new Observer<List<WorkoutSession>>() {
-            @Override
-            public void onChanged(List<WorkoutSession> workoutSessions) {
-                sessions = workoutSessions;
-                Log.d(TAG, "onChanged: " + sessions.size());
-            }
-        });
-        workoutViewModel.getAllSets(currentSessionExerciseId).observe(this, new Observer<List<Set>>() {
-            @Override
-            public void onChanged(List<Set> sets) {
-                for (Set set:sets) {
-                    Log.d(TAG, "onChanged: sets" + set.getId() +","+ set.getSession_exercise_id()+","+set.getReps()+","+set.getWeight()+","+set.getOrder());
-                }
-
-            }
-        });*/
 
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
@@ -159,7 +141,6 @@ public class NewExerciseFragment extends Fragment {
         setsAdapter.setOnSetClickListener(new SetAdapter.OnSetClickListener() {
             @Override
             public void OnEditClick(Set set) {
-                //setId = set.getId();
                 setOrder = set.getOrder();
                 SetDialog setDialog = new SetDialog();
 
@@ -175,7 +156,7 @@ public class NewExerciseFragment extends Fragment {
                     @Override
                     public void editSet(int reps, float weight) {
                         for (Set set : sets) {
-                            if(setOrder == set.getOrder()){//if(setId == set.getId()){
+                            if(setOrder == set.getOrder()){
                                 set.setReps(reps);
                                 set.setWeight(weight);
                                 setsAdapter.setSets(sets);
@@ -187,9 +168,6 @@ public class NewExerciseFragment extends Fragment {
 
             @Override
             public void OnDeleteClick(final Set set) {
-                //setId = set.getId();
-                //setOrder = set.getOrder();
-
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.set_dialog_delete_title))
                         .setMessage(getString(R.string.set_dialog_delete_text))
@@ -203,9 +181,6 @@ public class NewExerciseFragment extends Fragment {
                         .setPositiveButton(getString(R.string.dialog_delete), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Log.d(TAG, "onClick: " + setOrder);//Log.d(TAG, "onClick: " + setId);
-                                //sets.remove(setOrder-1);//sets.remove(setId-1);
-
                                 sets.remove(set);
 
                                 int list_order = 0;
@@ -226,7 +201,6 @@ public class NewExerciseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 utility.RepsSubtract(reps);
-                //RepsSubtract(reps);
             }
         });
 
@@ -234,7 +208,6 @@ public class NewExerciseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 utility.RepsAdd(reps);
-                //RepsAdd(reps);
             }
         });
 
@@ -242,7 +215,6 @@ public class NewExerciseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 utility.WeightSubtract(weight);
-                //WeightSubtract(weight);
 
             }
         });
@@ -251,7 +223,6 @@ public class NewExerciseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 utility.WeightAdd(weight);
-                //WeightAdd(weight);
             }
         });
 
@@ -264,7 +235,6 @@ public class NewExerciseFragment extends Fragment {
                         float set_weight = Float.parseFloat(weight.getText().toString().trim());
                         order = order + 1;
                         Set newSet = new Set(-1,set_reps,set_weight,order);
-                        //newSet.setId(order);
                         sets.add(newSet);
                         setsAdapter.setSets(sets);
                         SetVisibility();
@@ -340,7 +310,6 @@ public class NewExerciseFragment extends Fragment {
 
                 @Override
                 public void getLastWorkoutSession(WorkoutSession workoutSession) {
-                    //Log.d(TAG, "lastDate: lastdate" + android.text.format.DateFormat.format("yyyy-MM-dd", lastDate));
                     Date currentdate = new Date();
                     if(workoutSession != null){
                         currentWorkoutId = workoutSession.getId();
@@ -389,7 +358,6 @@ public class NewExerciseFragment extends Fragment {
                 public void lastSessionExerciseId(Long sessionExerciseId) {
                     Log.d(TAG, "lastSessionExerciseId: " + sessionExerciseId);
                     currentSessionExerciseId = sessionExerciseId.intValue();
-                    //workoutViewModel.getMaxOrderSets(sessionExerciseId.intValue());
                     Log.d(TAG, "lastSessionExerciseId: currentSessionExerciseId" + currentSessionExerciseId);
                     for (Set set : sets) {
                         set.setSession_exercise_id(currentSessionExerciseId);

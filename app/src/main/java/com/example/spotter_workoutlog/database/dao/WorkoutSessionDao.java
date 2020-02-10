@@ -20,9 +20,12 @@ public interface WorkoutSessionDao {
     @Delete
     void deleteWorkoutSession(WorkoutSession workoutSession);
 
-    @Query("SELECT * FROM workout_sessions")
+    @Query("DELETE FROM workout_sessions WHERE id = :workout_session_id")
+    void deleteWorkoutSessionById(int workout_session_id);
+
+    @Query("SELECT * FROM workout_sessions ORDER BY date")
     LiveData<List<WorkoutSession>> getAllWorkoutSessions();
 
-    @Query("SELECT * FROM workout_sessions ORDER BY ID DESC LIMIT 1")
+    @Query("SELECT * FROM workout_sessions ORDER BY date DESC LIMIT 1")
     WorkoutSession getLastWorkoutSession();
 }

@@ -169,6 +169,7 @@ public class CategoryFragment extends Fragment{
                                                     Log.d(TAG, "onClick: before delete" + categoryViewModel.getAllCategories().getValue().size());
                                                     category.setDeleted(true);
                                                     categoryViewModel.updateCategory(category);
+                                                    dialog.dismiss();
                                                     actionMode.finish();////
                                                     Snackbar.make(recyclerView, getString(R.string.snackbar_category_text_part1) + " " + category.getName() + " " + getString(R.string.snackbar_category_text_part2), Snackbar.LENGTH_LONG)
                                                             .setAction(getString(R.string.snackbar_cancel), new View.OnClickListener() {

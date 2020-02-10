@@ -25,7 +25,9 @@
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.CategoryActivity" />
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.CalendarActivity" />
+        <activity
+            android:name=".activities.CalendarActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

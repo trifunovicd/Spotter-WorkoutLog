@@ -10,8 +10,10 @@ import androidx.lifecycle.LiveData;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
 import com.example.spotter_workoutlog.database.models.WorkoutSession;
+import com.example.spotter_workoutlog.database.models.WorkoutStats;
 import com.example.spotter_workoutlog.repositories.WorkoutRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public class WorkoutViewModel extends AndroidViewModel{
@@ -19,13 +21,15 @@ public class WorkoutViewModel extends AndroidViewModel{
     private OnTaskFinishVM onTaskFinishVM;
     private OnTaskFinishSetsVM onTaskFinishSetsVM;
     private OnTaskFinishSetsVolumeVM onTaskFinishSetsVolumeVM;
+    //private OnTaskFinishCalendarVM onTaskFinishCalendarVM;
     private WorkoutRepository workoutRepository;
     private LiveData<List<WorkoutSession>> allWorkoutSessions;
     private LiveData<List<SessionExercise>> allSessionExercises;
     private LiveData<List<SessionExercise>> allSessionExercisesForExercise;
     private LiveData<List<SessionExercise>> allSessionExercisesForGraph;
     private LiveData<List<Set>> allSets;
-    private List<Set> allSetsForSession;
+    //private List<Float> workoutStats;
+    //private List<Set> allSetsForSession;
 
     public WorkoutViewModel(@NonNull Application application) {
         super(application);
@@ -62,6 +66,16 @@ public class WorkoutViewModel extends AndroidViewModel{
             public void getAllSetsForSession(List<Set> sets) {
                 onTaskFinishSetsVM.getAllSetsForSession(sets);
             }
+
+            @Override
+            public void getSessionsCount(int count) {
+                onTaskFinishSetsVM.getSessionsCount(count);
+            }
+
+            @Override
+            public void getWorkoutStats(WorkoutStats workoutStats) {
+                onTaskFinishSetsVM.getWorkoutStats(workoutStats);
+            }
         });
 
         ///// for GraphExerciseFragment
@@ -91,6 +105,13 @@ public class WorkoutViewModel extends AndroidViewModel{
                 onTaskFinishSetsVolumeVM.getSetWithMaxValues(set);
             }
         });
+/*
+        workoutRepository.setOnTaskFinishCalendarListener(new WorkoutRepository.OnTaskFinishCalendar() {
+            @Override
+            public void getAllSessionExercises(List<SessionExercise> sessionExercises) {
+                onTaskFinishCalendarVM.getAllSessionExercises(sessionExercises);
+            }
+        });*/
     }
 
     ///// WorkoutSession
@@ -106,6 +127,13 @@ public class WorkoutViewModel extends AndroidViewModel{
         return allWorkoutSessions;
     }
 
+    public void deleteWorkoutSession(WorkoutSession workoutSession){
+        workoutRepository.deleteWorkoutSession(workoutSession);
+    }
+
+    public void deleteWorkoutSessionById(int workout_session_id){
+        workoutRepository.deleteWorkoutSessionById(workout_session_id);
+    }
 
     ///// SessionExercise
     public void getMaxOrderOfSessionExercise(final int workoutSessionId){
@@ -139,6 +167,9 @@ public class WorkoutViewModel extends AndroidViewModel{
         return allSessionExercisesForGraph;
     }
 
+    public void getSessionsCount(int workout_session_id){
+        workoutRepository.getSessionsCount(workout_session_id);
+    }
 
     ///// Set
     public void insertSet(Set set){
@@ -186,6 +217,9 @@ public class WorkoutViewModel extends AndroidViewModel{
         workoutRepository.deleteSets(sets);
     }
 
+    public void getWorkoutStats(int workout_id){
+        workoutRepository.getWorkoutStats(workout_id);
+    }
 
 
     ///// for NewExerciseFragment
@@ -206,6 +240,8 @@ public class WorkoutViewModel extends AndroidViewModel{
     ///// for HistoryExerciseFragment
     public interface OnTaskFinishSetsVM{
         void getAllSetsForSession(List<Set> sets);
+        void getSessionsCount(int count);
+        void getWorkoutStats(WorkoutStats workoutStats);
     }
 
     public void setOnFinishSetsVMListener(OnTaskFinishSetsVM listener){
@@ -225,5 +261,4 @@ public class WorkoutViewModel extends AndroidViewModel{
     public void setOnSetsVolumeVMFinishListener(OnTaskFinishSetsVolumeVM listener){
         this.onTaskFinishSetsVolumeVM = listener;
     }
-
 }

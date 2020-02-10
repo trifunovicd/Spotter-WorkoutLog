@@ -15,6 +15,7 @@ import java.util.List;
 public class ExerciseViewModel extends AndroidViewModel {
     private OnExerciseVMTaskFinish onExerciseVMTaskFinish;
     private OnExerciseInsertVMFinish onExerciseInsertVMFinish;
+    private OnExerciseNameFinishVM onExerciseNameFinishVM;
     private ExerciseRepository exerciseRepository;
     private LiveData<List<Exercise>> allExercises;
     private LiveData<List<Exercise>> allExercisesInCategory;
@@ -35,6 +36,13 @@ public class ExerciseViewModel extends AndroidViewModel {
             @Override
             public void lastExerciseId(Long exercise_id) {
                 onExerciseInsertVMFinish.lastExerciseId(exercise_id);
+            }
+        });
+
+        exerciseRepository.setOnNameFinishListener(new ExerciseRepository.OnExerciseNameFinish() {
+            @Override
+            public void getExerciseName(String name) {
+                onExerciseNameFinishVM.getExerciseName(name);
             }
         });
     }
@@ -72,10 +80,13 @@ public class ExerciseViewModel extends AndroidViewModel {
         exerciseRepository.checkIfNameExists(name);
     }
 
+    public void getExerciseName(int exercise_id){
+        exerciseRepository.getExerciseName(exercise_id);
+    }
+
     public interface OnExerciseVMTaskFinish{
         void checkIfNameExists(int check);
     }
-
     public void setOnFinishListener(OnExerciseVMTaskFinish listener){
         this.onExerciseVMTaskFinish = listener;
     }
@@ -83,8 +94,15 @@ public class ExerciseViewModel extends AndroidViewModel {
     public interface OnExerciseInsertVMFinish{
         void lastExerciseId(Long exercise_id);
     }
-
     public void setOnInsertVMFinishListener(OnExerciseInsertVMFinish listener){
         this.onExerciseInsertVMFinish = listener;
+    }
+
+    //// for calendar
+    public interface OnExerciseNameFinishVM{
+        void getExerciseName(String name);
+    }
+    public void setOnNameFinishVMListener(OnExerciseNameFinishVM listener){
+        this.onExerciseNameFinishVM = listener;
     }
 }

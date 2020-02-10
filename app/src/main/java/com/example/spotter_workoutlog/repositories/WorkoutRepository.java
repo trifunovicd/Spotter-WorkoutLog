@@ -13,7 +13,9 @@ import com.example.spotter_workoutlog.database.dao.WorkoutSessionDao;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
 import com.example.spotter_workoutlog.database.models.WorkoutSession;
+import com.example.spotter_workoutlog.database.models.WorkoutStats;
 
+import java.util.Date;
 import java.util.List;
 
 public class WorkoutRepository {
@@ -21,6 +23,7 @@ public class WorkoutRepository {
     private OnTaskFinish onTaskFinish;
     private OnTaskFinishSets onTaskFinishSets;
     private OnTaskFinishSetsVolume onTaskFinishSetsVolume;
+    //private OnTaskFinishCalendar onTaskFinishCalendar;
     private WorkoutSessionDao workoutSessionDao;
     private LiveData<List<WorkoutSession>> allWorkoutSessions;
     private SessionExerciseDao sessionExerciseDao;
@@ -30,6 +33,7 @@ public class WorkoutRepository {
     private SetDao setDao;
     private LiveData<List<Set>> allSets;
     private List<Set> allSetsForSession;
+    private WorkoutStats workoutStats;
 
     public WorkoutRepository(Application application){
         AppDatabase database = AppDatabase.getInstance(application);
@@ -66,6 +70,23 @@ public class WorkoutRepository {
         return allWorkoutSessions;
     }
 
+    public void deleteWorkoutSession(final WorkoutSession workoutSession){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                workoutSessionDao.deleteWorkoutSession(workoutSession);
+            }
+        });
+    }
+
+    public void deleteWorkoutSessionById(final int workout_session_id){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                workoutSessionDao.deleteWorkoutSessionById(workout_session_id);
+            }
+        });
+    }
 
     ///// SessionExercise
     public void getMaxOrderOfSessionExercise(final int workoutSessionId){
@@ -109,6 +130,7 @@ public class WorkoutRepository {
 
     public LiveData<List<SessionExercise>> getAllSessionExercises(int workoutSessionId){
         allSessionExercises = sessionExerciseDao.getAllSessionExercises(workoutSessionId);
+        //onTaskFinishCalendar.getAllSessionExercises(allSessionExercises);
         return allSessionExercises;
     }
 
@@ -122,6 +144,15 @@ public class WorkoutRepository {
         return allSessionExercisesForGraph;
     }
 
+    public void getSessionsCount(final int workout_session_id){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                int count = sessionExerciseDao.getSessionsCount(workout_session_id);
+                onTaskFinishSets.getSessionsCount(count);
+            }
+        });
+    }
 
     ///// Set
     public void insertSet(final Set set){
@@ -225,6 +256,20 @@ public class WorkoutRepository {
         });
     }
 
+    /*public LiveData<List<Float>> getWorkoutStats(int workout_id){
+        workoutStats = setDao.getWorkoutStats(workout_id);
+        return workoutStats;
+    }*/
+
+    public void getWorkoutStats(final int workout_id){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                workoutStats = setDao.getWorkoutStats(workout_id);
+                onTaskFinishSets.getWorkoutStats(workoutStats);
+            }
+        });
+    }
 
     ///// for NewExerciseFragment
     public interface OnTaskFinish{
@@ -243,6 +288,8 @@ public class WorkoutRepository {
     ///// for HistoryExerciseFragment
     public interface OnTaskFinishSets{
         void getAllSetsForSession(List<Set> sets);
+        void getSessionsCount(int count);
+        void getWorkoutStats(WorkoutStats workoutStats);
     }
 
     public void setOnSetsFinishListener(OnTaskFinishSets listener){

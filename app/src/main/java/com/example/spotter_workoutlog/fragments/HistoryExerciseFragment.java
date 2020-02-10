@@ -32,10 +32,13 @@ import com.example.spotter_workoutlog.adapters.ExerciseHistoryAdapter;
 import com.example.spotter_workoutlog.database.models.ExerciseHistoryItem;
 import com.example.spotter_workoutlog.database.models.SessionExercise;
 import com.example.spotter_workoutlog.database.models.Set;
+import com.example.spotter_workoutlog.database.models.WorkoutSession;
+import com.example.spotter_workoutlog.database.models.WorkoutStats;
 import com.example.spotter_workoutlog.viewmodels.WorkoutViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryExerciseFragment extends Fragment {
@@ -44,12 +47,12 @@ public class HistoryExerciseFragment extends Fragment {
     private static final String EXERCISE_NAME = "exercise_name";
     private int currentExerciseId;
     private String currentExerciseName;
+    private int workoutSessionId = 0;
     private WorkoutViewModel workoutViewModel;
     private List<ExerciseHistoryItem> exerciseHistoryItems = new ArrayList<>();
     private List<SessionExercise> sessionExercisesList;
     private ExerciseHistoryAdapter exerciseHistoryAdapter;
     private List<List<Set>> setsForSession = new ArrayList<>();
-
     public static ActionMode actionMode;
 
     public static HistoryExerciseFragment newInstance(int exercise_id, String exercise_name) {
@@ -91,17 +94,35 @@ public class HistoryExerciseFragment extends Fragment {
         workoutViewModel.getAllSessionExercisesForExercise(currentExerciseId).observe(this, new Observer<List<SessionExercise>>() {
             @Override
             public void onChanged(List<SessionExercise> sessionExercises) {
-                Log.d(TAG, "onChanged: obrisan zapis");
                 sessionExercisesList = sessionExercises;
                 setsForSession.clear();
                 exerciseHistoryItems.clear();
-                Log.d(TAG, "onChanged: number of session exercises " + sessionExercisesList.size());
                 if(sessionExercisesList.size() == 0){
                     exerciseHistoryAdapter.setExerciseHistoryItems(exerciseHistoryItems);
                 }
                 else{
                     GetSets();
                 }
+            }
+        });
+
+        workoutViewModel.setOnFinishSetsVMListener(new WorkoutViewModel.OnTaskFinishSetsVM() {
+            @Override
+            public void getAllSetsForSession(List<Set> sets) {
+                setsForSession.add(sets);
+                SetExerciseHistory();
+            }
+
+            @Override
+            public void getSessionsCount(int count) {
+                if(count == 0){
+                    workoutViewModel.deleteWorkoutSessionById(workoutSessionId);
+                }
+            }
+
+            @Override
+            public void getWorkoutStats(WorkoutStats workoutStats) {
+
             }
         });
 
@@ -152,6 +173,10 @@ public class HistoryExerciseFragment extends Fragment {
                                                     SessionExercise sessionExercise = new SessionExercise(exerciseHistoryItem.getWorkout_session_id(),exerciseHistoryItem.getExercise_id(),exerciseHistoryItem.getOrder(),exerciseHistoryItem.getDate(),exerciseHistoryItem.getNote());
                                                     sessionExercise.setId(exerciseHistoryItem.getId());
                                                     workoutViewModel.deleteSessionExercise(sessionExercise);
+
+                                                    workoutSessionId = sessionExercise.getWorkout_session_id();
+                                                    workoutViewModel.getSessionsCount(workoutSessionId);
+
                                                     dialog.dismiss();
                                                     actionMode.finish();
                                                 }
@@ -176,25 +201,13 @@ public class HistoryExerciseFragment extends Fragment {
     }
 
     private void GetSets(){
-        Log.d(TAG, "GetSets: uspio");
-        workoutViewModel.setOnFinishSetsVMListener(new WorkoutViewModel.OnTaskFinishSetsVM() {
-            @Override
-            public void getAllSetsForSession(List<Set> sets) {
-                Log.d(TAG, "getAllSetsForSession: uspio opet");
-                setsForSession.add(sets);
-                SetExerciseHistory();
-            }
-        });
         for (SessionExercise sessionExercise : sessionExercisesList) {
             workoutViewModel.getAllSetsForSession(sessionExercise.getId());
         }
     }
 
     private void SetExerciseHistory(){
-        Log.d(TAG, "SetExerciseHistory: uspio treci");
-        Log.d(TAG, "SetExerciseHistory: sessionExercisesList: " + sessionExercisesList.size() + ", setsForSession: " + setsForSession.size());
         if(sessionExercisesList.size() == setsForSession.size()){
-            Log.d(TAG, "SetExerciseHistory: isti su" );
             int counter = 0;
             for (SessionExercise sessionExercise : sessionExercisesList) {
                 ExerciseHistoryItem exerciseHistoryItem = new ExerciseHistoryItem(sessionExercise.getId(),sessionExercise.getWorkout_session_id(),sessionExercise.getExercise_id(),sessionExercise.getOrder(),sessionExercise.getDate(),sessionExercise.getNote(),setsForSession.get(counter));

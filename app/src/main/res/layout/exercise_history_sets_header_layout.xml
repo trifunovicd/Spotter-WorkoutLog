@@ -15,6 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/set"
+            android:maxLines="1"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_column="0"/>
@@ -23,6 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/reps"
+            android:maxLines="1"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_column="1"/>
@@ -31,6 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/weight"
+            android:maxLines="1"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_column="2"/>

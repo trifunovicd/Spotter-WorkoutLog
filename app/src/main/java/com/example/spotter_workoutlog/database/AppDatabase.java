@@ -56,7 +56,9 @@ public abstract class AppDatabase extends RoomDatabase {
 
                                     getInstance(context).categoryDao().insertCategory(new Category("Prsa", false));
                                     getInstance(context).exerciseDao().insertExercise(new Exercise("Bench press", false));
+                                    getInstance(context).exerciseDao().insertExercise(new Exercise("Deadlift", false));
                                     getInstance(context).exerciseInCategoryDao().insertExerciseInCategory(new ExerciseInCategory(1, 1));
+                                    getInstance(context).exerciseInCategoryDao().insertExerciseInCategory(new ExerciseInCategory(1, 2));
 
                                     getInstance(context).workoutSessionDao().insertWorkoutSession(new WorkoutSession(new Date(1546297200000L)));
                                     getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(1,1,1, new Date(1546297200000L), ""));
@@ -201,9 +203,40 @@ public abstract class AppDatabase extends RoomDatabase {
                                     getInstance(context).workoutSessionDao().insertWorkoutSession(new WorkoutSession(new Date(1580511600000L)));
                                     getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(21,1,1, new Date(1580511600000L), ""));
 
-                                    getInstance(context).setDao().insertSet(new Set(21,16,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(21,21,19,1));
                                     getInstance(context).setDao().insertSet(new Set(21,17,19,2));
                                     getInstance(context).setDao().insertSet(new Set(21,12,19,3));
+
+                                    getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(21,1,2, new Date(1580518800000L), ""));
+
+                                    getInstance(context).setDao().insertSet(new Set(22,22,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(22,17,19,2));
+                                    getInstance(context).setDao().insertSet(new Set(22,12,19,3));
+
+                                    getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(21,1,3, new Date(1580520600000L), ""));
+
+                                    getInstance(context).setDao().insertSet(new Set(23,23,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(23,17,19,2));
+                                    getInstance(context).setDao().insertSet(new Set(23,12,19,3));
+
+                                    getInstance(context).workoutSessionDao().insertWorkoutSession(new WorkoutSession(new Date(1581166800000L)));
+                                    getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(22,2,1, new Date(1581166800000L), ""));
+
+                                    getInstance(context).setDao().insertSet(new Set(24,23,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(24,17,19,2));
+                                    getInstance(context).setDao().insertSet(new Set(24,12,19,3));
+
+                                    getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(22,2,2, new Date(1581168600000L), ""));
+
+                                    getInstance(context).setDao().insertSet(new Set(25,23,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(25,17,19,2));
+                                    getInstance(context).setDao().insertSet(new Set(25,12,19,3));
+
+                                    getInstance(context).sessionExerciseDao().insertSessionExercise(new SessionExercise(22,2,3, new Date(1581170400000L), ""));
+
+                                    getInstance(context).setDao().insertSet(new Set(26,23,19,1));
+                                    getInstance(context).setDao().insertSet(new Set(26,17,19,2));
+                                    getInstance(context).setDao().insertSet(new Set(26,12,19,3));
                                 }
                             });
                         }

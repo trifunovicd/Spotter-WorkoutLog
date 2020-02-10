@@ -15,12 +15,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.spotter_workoutlog.R;
+import com.example.spotter_workoutlog.utilities.Utility;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class SetDialog extends AppCompatDialogFragment {
     private TextInputEditText reps;
-    private  TextInputEditText weight;
+    private TextInputEditText weight;
+    private FloatingActionButton reps_sub_button, reps_add_button, weight_sub_button, weight_add_button;
     private SetDialogListener listener;
+    private Utility utility = new Utility();
 
     @NonNull
     @Override
@@ -32,6 +36,11 @@ public class SetDialog extends AppCompatDialogFragment {
 
         reps = view.findViewById(R.id.edit_reps);
         weight = view.findViewById(R.id.edit_weight);
+
+        reps_sub_button = view.findViewById(R.id.sub_rep_edit);
+        reps_add_button = view.findViewById(R.id.add_rep_edit);
+        weight_sub_button = view.findViewById(R.id.sub_weight_edit);
+        weight_add_button = view.findViewById(R.id.add_weight_edit);
 
         builder.setView(view)
                 .setTitle(getString(R.string.edit_set_title))
@@ -65,6 +74,35 @@ public class SetDialog extends AppCompatDialogFragment {
 
             reps.setText(String.valueOf(reps_number));
             weight.setText(String.valueOf(weight_number));
+
+            reps_sub_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    utility.RepsSubtract(reps);
+                }
+            });
+
+            reps_add_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    utility.RepsAdd(reps);
+                }
+            });
+
+            weight_sub_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    utility.WeightSubtract(weight);
+
+                }
+            });
+
+            weight_add_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    utility.WeightAdd(weight);
+                }
+            });
 
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override

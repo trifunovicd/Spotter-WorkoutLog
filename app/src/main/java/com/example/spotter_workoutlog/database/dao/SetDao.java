@@ -6,10 +6,13 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RoomWarnings;
 import androidx.room.Update;
 
 import com.example.spotter_workoutlog.database.models.Category;
 import com.example.spotter_workoutlog.database.models.Set;
+import com.example.spotter_workoutlog.database.models.WorkoutSession;
+import com.example.spotter_workoutlog.database.models.WorkoutStats;
 
 import java.util.List;
 
@@ -52,7 +55,6 @@ public interface SetDao {
     @Query("SELECT * FROM sets WHERE session_exercise_id = :sessionExerciseId ORDER BY weight DESC, reps DESC LIMIT 1 ")
     Set getSetWithMaxValues(int sessionExerciseId);
 
-/*
-    @Query("SELECT MAX(`order`) FROM sets WHERE session_exercise_id = :sessionExerciseId")
-    int getMaxOrderSets(int sessionExerciseId);*/
+    @Query("SELECT COUNT(sets.id) AS sets, SUM(sets.reps) AS reps, SUM(sets.weight * sets.reps) AS weight FROM workout_sessions, session_exercises, sets WHERE workout_sessions.id = :workout_id AND workout_sessions.id = session_exercises.workout_session_id AND session_exercises.id = sets.session_exercise_id")
+    WorkoutStats getWorkoutStats(int workout_id);
 }

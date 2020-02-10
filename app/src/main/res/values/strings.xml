@@ -84,6 +84,12 @@
     <string name="one_year">1 godina</string>
     <string name="all_time">Cijelo vrijeme</string>
     <string name="chart_text">Nema podataka za prikaz.</string>
+    <string name="calendar_no_data">Nema podataka za izabrani dan!</string>
+    <string name="deleted_exercise_name">Vježba obrisana</string>
+    <string name="exercises">Vježbe</string>
+    <string name="sets">Serije</string>
+    <string name="weight_volume">Kilaža</string>
+
 
     <string-array name="graph_items">
         <item>Ukupni volumen</item>

@@ -362,6 +362,7 @@ public class GraphExerciseFragment extends Fragment {
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(xAxisFormatter);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelCount(5);
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setEnabled(false);
@@ -374,7 +375,7 @@ public class GraphExerciseFragment extends Fragment {
     }
 
     private void ChangeDateView(List<Entry> entriesList){
-        Date date = new DateTime().minusMonths(3).toDate();
+       /* Date date = new DateTime().minusMonths(3).toDate();
         List<Entry> monthViewEntries = new ArrayList<>();
 
         for (Entry entry : entriesList) {
@@ -384,7 +385,47 @@ public class GraphExerciseFragment extends Fragment {
                 monthViewEntries.add(entry);
             }
         }
-        SetData(monthViewEntries);
+        SetData(monthViewEntries);*/
+
+        List<Entry> monthViewEntries = DateView(entriesList,3);
+
+        if(monthViewEntries.size() < 3){
+            monthViewEntries = DateView(entriesList,6);
+            
+            if(monthViewEntries.size() < 3){
+                monthViewEntries = DateView(entriesList,12);
+
+                if(monthViewEntries.size() < 3){
+                    SetData(entries);
+                    Log.d(TAG, "ChangeDateView: all");
+                }
+                else{
+                    SetData(monthViewEntries);
+                    Log.d(TAG, "ChangeDateView: 12");
+                }
+            }
+            else{
+                SetData(monthViewEntries);
+                Log.d(TAG, "ChangeDateView: 6");
+            }
+        }
+        else{
+            SetData(monthViewEntries);
+            Log.d(TAG, "ChangeDateView: 3");
+        }
+    }
+
+    private List<Entry> DateView(List<Entry> entriesList, int months){
+        Date date = new DateTime().minusMonths(months).toDate();
+        List<Entry> monthViewEntries = new ArrayList<>();
+        for (Entry entry : entriesList) {
+            float entry_date = entry.getX() + reference_timestamp;
+
+            if(entry_date >= date.getTime()){
+                monthViewEntries.add(entry);
+            }
+        }
+        return monthViewEntries;
     }
 
     private void SetData(List<Entry> entriesList){

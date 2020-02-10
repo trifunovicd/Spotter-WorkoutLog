@@ -166,6 +166,7 @@ public class ExerciseFragment extends Fragment {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     exercise.setDeleted(true);
                                                     exerciseViewModel.updateExercise(exercise);
+                                                    dialog.dismiss();
                                                     actionMode.finish();
                                                     Snackbar.make(recyclerView, getString(R.string.snackbar_exercise_text_part1) + " " + exercise.getName() + " " + getString(R.string.snackbar_exercise_text_part2), Snackbar.LENGTH_LONG)
                                                             .setAction(getString(R.string.snackbar_cancel), new View.OnClickListener() {

@@ -1,5 +1,7 @@
 package com.example.spotter_workoutlog.database.models;
 
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -21,7 +23,7 @@ import java.util.Date;
                     entity = Exercise.class,
                     parentColumns = "id",
                     childColumns = "exercise_id",
-                    onDelete = ForeignKey.CASCADE)})
+                    onDelete = ForeignKey.SET_NULL)})
 public class SessionExercise {
 
     @PrimaryKey(autoGenerate = true)
@@ -29,7 +31,7 @@ public class SessionExercise {
 
     private int workout_session_id;
 
-    private int exercise_id;
+    private Integer exercise_id;
 
     private int order;
 
@@ -37,9 +39,14 @@ public class SessionExercise {
 
     private String note;
 
-    public SessionExercise(int workout_session_id, int exercise_id, int order, Date date, String note) {
+    public SessionExercise(int workout_session_id, Integer exercise_id, int order, Date date, String note) {
         this.workout_session_id = workout_session_id;
-        this.exercise_id = exercise_id;
+        if(exercise_id != null){
+            this.exercise_id = exercise_id;
+        }
+        else {
+            this.exercise_id = 0;
+        }
         this.order = order;
         this.date = date;
         this.note = note;
@@ -61,11 +68,11 @@ public class SessionExercise {
         this.workout_session_id = workout_session_id;
     }
 
-    public int getExercise_id() {
+    public Integer getExercise_id() {
         return exercise_id;
     }
 
-    public void setExercise_id(int exercise_id) {
+    public void setExercise_id(Integer exercise_id) {
         this.exercise_id = exercise_id;
     }
 

@@ -34,4 +34,7 @@ public interface SessionExerciseDao {
 
     @Query("SELECT MAX(`order`) FROM session_exercises WHERE workout_session_id = :workoutSessionId")
     int getMaxOrderOfSessionExercise(int workoutSessionId);
+
+    @Query("SELECT COUNT(session_exercises.id) FROM session_exercises, workout_sessions WHERE workout_sessions.id = session_exercises.workout_session_id AND workout_sessions.id = :workout_session_id")
+    Integer getSessionsCount(int workout_session_id);
 }

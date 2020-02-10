@@ -71,7 +71,14 @@ public class EditSessionExerciseActivity extends AppCompatActivity {
 
         if (extras != null) {
             exerciseHistoryItem = (ExerciseHistoryItem) extras.getSerializable("exerciseHistoryItem");
-            currentExerciseName = extras.getString("currentExerciseName");
+
+            if(extras.getString("currentExerciseName") == null){
+                currentExerciseName = getString(R.string.deleted_exercise_name);
+            }
+            else{
+                currentExerciseName = extras.getString("currentExerciseName");
+            }
+
         }
 
         setTitle(currentExerciseName);

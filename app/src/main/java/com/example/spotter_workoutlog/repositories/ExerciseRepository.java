@@ -18,6 +18,7 @@ public class ExerciseRepository {
     private static final String TAG = "MyActivity";
     private OnExerciseTaskFinish onExerciseTaskFinish;
     private OnExerciseInsertFinish onExerciseInsertFinish;
+    private OnExerciseNameFinish onExerciseNameFinish;
     private ExerciseDao exerciseDao;
     private LiveData<List<Exercise>> allExercises;
     private ExerciseInCategoryDao exerciseInCategoryDao;
@@ -103,10 +104,19 @@ public class ExerciseRepository {
         });
     }
 
+    public void getExerciseName(final int exercise_id){
+        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                String name = exerciseDao.getExerciseName(exercise_id);
+                onExerciseNameFinish.getExerciseName(name);
+            }
+        });
+    }
+
     public interface OnExerciseTaskFinish{
         void checkIfNameExists(int check);
     }
-
     public void setOnFinishListener(OnExerciseTaskFinish listener){
         this.onExerciseTaskFinish = listener;
     }
@@ -114,8 +124,15 @@ public class ExerciseRepository {
     public interface OnExerciseInsertFinish{
         void lastExerciseId(Long exercise_id);
     }
-
     public void setOnInsertFinishListener(OnExerciseInsertFinish listener){
         this.onExerciseInsertFinish = listener;
+    }
+
+    //// for calendar
+    public interface OnExerciseNameFinish{
+        void getExerciseName(String name);
+    }
+    public void setOnNameFinishListener(OnExerciseNameFinish listener){
+        this.onExerciseNameFinish = listener;
     }
 }

@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:padding="16dp"
+    android:gravity="center"
+    android:focusableInTouchMode="true">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sub_rep_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        android:src="@drawable/ic_remove"
+        android:layout_margin="10dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_reps_layout"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_toEndOf="@id/sub_rep_edit"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_reps"
@@ -17,10 +32,34 @@
             android:inputType="number"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_rep_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        android:src="@drawable/ic_add"
+        android:layout_toEndOf="@id/edit_reps_layout"
+        android:layout_margin="10dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sub_weight_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        android:src="@drawable/ic_remove"
+        android:layout_below="@+id/sub_rep_edit"
+        android:layout_margin="10dp"/>
+
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_weight_layout"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_below="@+id/edit_reps_layout"
+        android:layout_toEndOf="@+id/sub_weight_edit"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_weight"
@@ -29,4 +68,16 @@
             android:hint="@string/weight"
             android:inputType="numberDecimal"/>
     </com.google.android.material.textfield.TextInputLayout>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_weight_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        app:elevation="0dp"
+        android:src="@drawable/ic_add"
+        android:layout_below="@+id/add_rep_edit"
+        android:layout_toEndOf="@+id/edit_weight_layout"
+        android:layout_margin="10dp"/>
+
+</RelativeLayout>
