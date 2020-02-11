@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,43 +61,45 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
         else {
-            position--;
-            ExerciseHistoryItem exerciseHistoryItem = exerciseHistoryItems.get(position);
+            if(!exerciseHistoryItems.isEmpty()){
+                position--;
+                ExerciseHistoryItem exerciseHistoryItem = exerciseHistoryItems.get(position);
 
-            if(exerciseNames.get(position) != null){
-                ((CalendarItemHolder) holder).name.setText(exerciseNames.get(position));
-            }
-            else{
-                ((CalendarItemHolder) holder).name.setText(exerciseNames.get(exerciseNames.size()-1));
-            }
+                if(exerciseNames.get(position) != null){
+                    ((CalendarItemHolder) holder).name.setText(exerciseNames.get(position));
+                }
+                else{
+                    ((CalendarItemHolder) holder).name.setText(exerciseNames.get(exerciseNames.size()-1));
+                }
 
-            ((CalendarItemHolder) holder).time.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(exerciseHistoryItem.getDate()));
+                ((CalendarItemHolder) holder).time.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(exerciseHistoryItem.getDate()));
 
-            if(!exerciseHistoryItem.getNote().isEmpty()){
-                ((CalendarItemHolder) holder).noteLayout.setVisibility(View.VISIBLE);
-                ((CalendarItemHolder) holder).note.setText(exerciseHistoryItem.getNote());
-            }
-            else{
-                ((CalendarItemHolder) holder).noteLayout.setVisibility(View.GONE);
-            }
+                if(!exerciseHistoryItem.getNote().isEmpty()){
+                    ((CalendarItemHolder) holder).noteLayout.setVisibility(View.VISIBLE);
+                    ((CalendarItemHolder) holder).note.setText(exerciseHistoryItem.getNote());
+                }
+                else{
+                    ((CalendarItemHolder) holder).noteLayout.setVisibility(View.GONE);
+                }
 
-            ExerciseHistorySetAdapter exerciseHistorySetAdapter = new ExerciseHistorySetAdapter();
-            exerciseHistorySetAdapter.setSets(exerciseHistoryItem.getSets());
+                ExerciseHistorySetAdapter exerciseHistorySetAdapter = new ExerciseHistorySetAdapter();
+                exerciseHistorySetAdapter.setSets(exerciseHistoryItem.getSets());
 
-            ((CalendarItemHolder) holder).setsRecyclerView.setLayoutManager(new LinearLayoutManager(((CalendarItemHolder) holder).setsRecyclerView.getContext()));
-            ((CalendarItemHolder) holder).setsRecyclerView.setHasFixedSize(true);
-            ((CalendarItemHolder) holder).setsRecyclerView.setAdapter(exerciseHistorySetAdapter);
+                ((CalendarItemHolder) holder).setsRecyclerView.setLayoutManager(new LinearLayoutManager(((CalendarItemHolder) holder).setsRecyclerView.getContext()));
+                ((CalendarItemHolder) holder).setsRecyclerView.setHasFixedSize(true);
+                ((CalendarItemHolder) holder).setsRecyclerView.setAdapter(exerciseHistorySetAdapter);
 
-            exerciseHistorySetAdapter.setOnHistoryItemLongClickListener(new ExerciseHistorySetAdapter.OnSetItemLongClickListener() {
-                @Override
-                public void OnItemClick(int session_exercise_id) {
-                    for (int position = 0; position < exerciseHistoryItems.size(); position++){
-                        if (exerciseHistoryItems.get(position).getId() == session_exercise_id){
-                            listener.OnItemClick(exerciseHistoryItems.get(position), position+1, exerciseNames.get(position));
+                exerciseHistorySetAdapter.setOnHistoryItemLongClickListener(new ExerciseHistorySetAdapter.OnSetItemLongClickListener() {
+                    @Override
+                    public void OnItemClick(int session_exercise_id) {
+                        for (int position = 0; position < exerciseHistoryItems.size(); position++){
+                            if (exerciseHistoryItems.get(position).getId() == session_exercise_id){
+                                listener.OnItemClick(exerciseHistoryItems.get(position), position+1, exerciseNames.get(position));
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

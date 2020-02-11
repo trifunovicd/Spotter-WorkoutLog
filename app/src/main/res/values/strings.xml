@@ -89,6 +89,7 @@
     <string name="exercises">Vježbe</string>
     <string name="sets">Serije</string>
     <string name="weight_volume">Kilaža</string>
+    <string name="today">Danas</string>
 
 
     <string-array name="graph_items">

@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,8 +54,9 @@ public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "MyActivity";
     private AppBarLayout appBarLayout;
     private CompactCalendarView compactCalendarView;
-    private TextView datePickerTextView;
+    private TextView datePickerTextView, calendarMonth;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
+    private SimpleDateFormat dateMonthFormat = new SimpleDateFormat("MMM yyyy", Locale.getDefault());
     private boolean isExpanded = false;
     private ImageView arrow;
     private LinearLayout datePickerButton;
@@ -72,6 +74,8 @@ public class CalendarActivity extends AppCompatActivity {
     private int workoutId;
     private LiveData<List<SessionExercise>> observable;
     private Observer observer;
+    private WorkoutStats mWorkoutStats;
+    private Date currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class CalendarActivity extends AppCompatActivity {
         appBarLayout = findViewById(R.id.app_bar_layout);
         datePickerTextView = findViewById(R.id.date_picker_text_view);
         arrow = findViewById(R.id.date_picker_arrow);
+        calendarMonth = findViewById(R.id.calendar_month);
 
         compactCalendarView = findViewById(R.id.compact_calendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
@@ -91,13 +96,12 @@ public class CalendarActivity extends AppCompatActivity {
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                observable.removeObserver(observer);
                 FetchData(dateClicked);
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-
+                calendarMonth.setText(dateMonthFormat.format(firstDayOfNewMonth));
             }
         });
 
@@ -229,12 +233,24 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<WorkoutSession> workoutSessions) {
                 workoutSessionsList = workoutSessions;
-                Date currentDate = workoutSessionsList.get(workoutSessionsList.size() - 1).getDate();
-                compactCalendarView.setCurrentDate(currentDate);
-                setTitle(dateFormat.format(currentDate));
-                compactCalendarView.removeAllEvents();
-                MarkEvents();
-                FetchData(currentDate);
+                if(!workoutSessionsList.isEmpty()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    currentDate = workoutSessionsList.get(workoutSessionsList.size() - 1).getDate();
+                    compactCalendarView.setCurrentDate(currentDate);
+                    setTitle(dateFormat.format(currentDate));
+                    calendarMonth.setText(dateMonthFormat.format(currentDate));
+                    compactCalendarView.removeAllEvents();
+                    MarkEvents();
+                    FetchData(currentDate);
+                }
+                else{
+                    recyclerView.setVisibility(View.GONE);
+                    Date date = new Date();
+                    compactCalendarView.setCurrentDate(date);
+                    setTitle(dateFormat.format(date));
+                    calendarMonth.setText(dateMonthFormat.format(date));
+                    compactCalendarView.removeAllEvents();
+                }
             }
         });
 
@@ -254,7 +270,8 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void getWorkoutStats(WorkoutStats workoutStats) {
-                calendarAdapter.setWorkoutStats(workoutStats);
+                mWorkoutStats = workoutStats;
+                calendarAdapter.setWorkoutStats(mWorkoutStats);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -289,6 +306,11 @@ public class CalendarActivity extends AppCompatActivity {
     private void FetchData(final Date dateClicked){
         List<Event> events = compactCalendarView.getEvents(dateClicked);
         if(!events.isEmpty()){
+
+            if(observable != null && observer != null){
+                observable.removeObserver(observer);
+            }
+
             setTitle(dateFormat.format(dateClicked));
             appBarLayout.setExpanded(false, true);
             workoutId = Integer.valueOf(events.get(0).getData().toString());
@@ -300,11 +322,15 @@ public class CalendarActivity extends AppCompatActivity {
                     setsForSession.clear();
                     exerciseHistoryItems.clear();
                     exerciseNamesList.clear();
+                    mWorkoutStats = new WorkoutStats(0,0,0f);
                     if(sessionExerciseList.size() == 0){
+                        calendarAdapter.setExerciseNames(exerciseNamesList);
+                        calendarAdapter.setWorkoutStats(mWorkoutStats);
                         calendarAdapter.setExerciseHistoryItems(exerciseHistoryItems);
                         WorkoutSession workoutSession = new WorkoutSession(dateClicked);
                         workoutSession.setId(workoutId);
                         workoutViewModel.deleteWorkoutSession(workoutSession);
+                        observable.removeObserver(this);
                     }
                     else{
                         GetSets();
@@ -333,6 +359,33 @@ public class CalendarActivity extends AppCompatActivity {
             exerciseHistoryItems.add(exerciseHistoryItem);
             exerciseViewModel.getExerciseName(sessionExercise.getExercise_id());
             counter++;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.calendar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.calendar_today){
+            if(!workoutSessionsList.isEmpty()){
+                compactCalendarView.setCurrentDate(currentDate);
+                calendarMonth.setText(dateMonthFormat.format(currentDate));
+                FetchData(currentDate);
+            }
+            else{
+                Date date = new Date();
+                compactCalendarView.setCurrentDate(date);
+                calendarMonth.setText(dateMonthFormat.format(date));
+            }
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
         }
     }
 }

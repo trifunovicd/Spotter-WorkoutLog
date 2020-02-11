@@ -6,7 +6,8 @@
     android:layout_marginTop="12dp"
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    android:id="@+id/calendar_header">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/exercises"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:textSize="16sp"/>
 
@@ -55,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sets"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:textSize="16sp"/>
 
@@ -81,6 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reps"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:textSize="16sp"/>
 
@@ -107,6 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/weight_volume"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:textSize="16sp"/>
 
